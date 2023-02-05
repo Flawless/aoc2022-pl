@@ -1,8 +1,8 @@
-outcome(scissors, rock, loose).
-outcome(rock, paper, loose).
-outcome(paper, scissors, loose).
+outcome(scissors, rock, loss).
+outcome(rock, paper, loss).
+outcome(paper, scissors, loss).
 outcome(X, X, draw).
-outcome(X, Y, win) :- outcome(Y, X, loose).
+outcome(X, Y, win) :- outcome(Y, X, loss).
 
 sign_weight(scissors, 3).
 sign_weight(paper, 2).
@@ -10,7 +10,7 @@ sign_weight(rock, 1).
 
 outcome_weight(win, 6).
 outcome_weight(draw, 3).
-outcome_weight(loose, 0).
+outcome_weight(loss, 0).
 
 round(X, Y, Z, S) :-
     outcome(X, Y, Z),
@@ -51,7 +51,7 @@ decode_1('Z', scissors).
 decode_2('A', rock).
 decode_2('B', paper).
 decode_2('C', scissors).
-decode_2('X', loose).
+decode_2('X', loss).
 decode_2('Y', draw).
 decode_2('Z', win).
 
@@ -62,12 +62,12 @@ game_1(F, S) :-
 
 game_1(_, 0, []).
 
-game_1(_, S, [[X, Y] | Ps]) :-
+game_1(_, NS, [[X, Y] | Ps]) :-
     decode_1(X, Xs),
     decode_1(Y, Ys),
     round(Ys, Xs, _, RS),
-    game_1(_, NS, Ps),
-    S is NS + RS.
+    game_1(_, S, Ps),
+    NS is S + RS.
 
 game_2(F, S) :-
     read_lines_from_file(F, Ls),
